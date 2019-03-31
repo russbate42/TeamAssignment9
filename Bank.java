@@ -1,46 +1,45 @@
-
+import java.awt.*;
 import java.util.*;
 
-public class Bank{
 
-    private PriorityQueue<Customer> customers = new PriorityQueue<Customer>(new CustomerPriorityComparator());
-    private ArrayList<BankAccount> accounts = new ArrayList<BankAccount>();	
+public class Bank {
 
-	public void addCustomer(Customer aCustomer){
-        customers.add(aCustomer);
-	}
+    private HashSet<BankAccount> accounts;
+    private PriorityQueue<Customer> queue;
 
+    public Bank(){
+        accounts = new HashSet<>();
+        queue = new PriorityQueue(new CustomerPriorityComparator());
+    }
 
-	public Customer[] getCustomers(){
-		int customersSize = customers.size();
-		Customer[] copyCustomers = new Customer[customersSize];
-		int i = 0;
-
-		for (Customer aCustomer : customers){
-            copyCustomers[i] = aCustomer;
-		    i++;
-		}
-
-		return copyCustomers;
-	}
+    public void addAccount(BankAccount acc) throws DuplicateAccountException {
+        if(accounts.contains(acc)){
+            throw new DuplicateAccountException();
+        }
+        accounts.add(acc);
+    }
 
 
-	public void addAccount(BankAccount anAccount){
-        accounts.add(anAccount);
-	}
+    public void addCustomer(Customer toAdd) {
+        queue.add(toAdd);
+    }
 
+    public Customer nextCustomer(){
+        return queue.poll();
+    }
 
-	public BankAccount[] getAccounts(){
-		BankAccount[] returnAccounts = new BankAccount[accounts.size()];
-		int counter = 0;
+    public void queueCustomer(Customer c){
+        queue.add(c);
+    }
 
-		for (BankAccount anAccount : accounts){
-			returnAccounts[counter] = anAccount;
-			counter++;
-		}
-		
-		return returnAccounts;
-	}
+    public BankAccount[] getAccounts(){
+        return accounts.toArray(new BankAccount[accounts.size()]);
+    }
 
+    public Customer[] getCustomers(){
+        Customer[] customers = queue.toArray(new Customer[queue.size()]);
+        Arrays.sort(customers,queue.comparator());
+        return customers;
+    }
 
 }

@@ -1,65 +1,31 @@
+import java.util.Arrays;
+import java.util.Comparator;
 
-import java.util.Scanner;
-import java.util.*;
+public class CustomerPriorityComparator implements Comparator {
 
+    @Override
+    public int compare(Object o1, Object o2) {
+        Customer c1 = (Customer) o1;
+        Customer c2 = (Customer) o2;
+        CreditHistory h1 = c1.getCreditHistory();
+        CreditHistory h2 = c2.getCreditHistory();
+        boolean nonNullHistory = h1!=null && h2!=null;
 
-public class CustomerPriorityComparator implements Comparator<Customer> {
-
-	private String name;
-	private int customerID;
-    private CreditHistory history;
-
-
-	public CustomerPriorityComparator(){
-        name = "";
-        customerID = 0;
-	}
-
-
-    public int compare(Customer a, Customer b) {
-        int rating0 = (int) a.getCreditHistory().getCreditRating();
-        int rating1 = (int) b.getCreditHistory().getCreditRating();
-        
-        if(rating0 == rating1 ) {
-            return 0;
-        }
-        else if (rating0 < rating1) {
-            return 1;
-        }
-        else {
+       if(nonNullHistory && h1.getCreditRating()>h2.getCreditRating()){
             return -1;
+        }else if(nonNullHistory && h1.getCreditRating()<h2.getCreditRating()){
+            return 1;
+        }else if(!c1.getName().equals(c2)){
+            char[] myName = c1.getName().toCharArray();
+            char[] otherName = c2.getName().toCharArray();
+            for(int i=0;i<myName.length && i<otherName.length;i++){
+                if(Character.toLowerCase(myName[i])<Character.toLowerCase(otherName[i])) return -1;
+                if(Character.toLowerCase(myName[i])>Character.toLowerCase(otherName[i])) return 1;
+            }
         }
+
+        return 0;
     }
 
-
-
-    public String getName(){
-        String copyName = name;
-        return copyName;
-    }
-
-
-    public void setName(String newName){
-        name = newName;
-    }
-
-
-    public void setCustomerID(int newID){
-        customerID = newID;
-    }
-
-
-    public int getCustomerID(){
-        int copyID = customerID;
-        return copyID;
-    }
-
-
-	public String toString(){
-		String customerIDstring = Integer.toString(customerID);
-        String customerString = name+" "+customerIDstring;
-        return customerString;
-	}
 
 }
-

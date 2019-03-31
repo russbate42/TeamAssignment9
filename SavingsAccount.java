@@ -1,121 +1,62 @@
-
 public class SavingsAccount extends BankAccount {
-
 	private double annualInterestRate = 0.05;
-	private double minimumBalance;
-
-
-    /**
-    * This is the default constructor for the bank account. 
-    **/
-    public SavingsAccount(){
-        super();
+	private double minimumBalance = 0;
+	
+	public SavingsAccount(){}
+	
+	public SavingsAccount(double annualInterestRate) {
+		super();
+		setAnnualInterestRate(annualInterestRate);
+	}
+	
+	public SavingsAccount(String accountNumber){
+		super(0.0,accountNumber);
+	}
+	
+	public SavingsAccount(double balance, double annualInterestRate) {
+		super(balance);
+		setAnnualInterestRate(annualInterestRate);
+	}
+	
+	public SavingsAccount(Customer accountHolder, double balance, double annualInterestRate) {
+		super(accountHolder, balance);
+		setAnnualInterestRate(annualInterestRate);
+	}
+	
+	public SavingsAccount(Customer accountHolder, double balance) {
+		super(accountHolder, balance);
+	}
+	
+    protected double getMonthlyFeesAndInterest() {
+		double amount = (annualInterestRate*getBalance())/12;
+        return amount;            
     }
 
-
-    public SavingsAccount(String aNum){
-        super(aNum);
-    }
-
-
-    /**
-    * Constructor for bank account taking one argument. 
-    * @param startBalance is the balance to initialize the bank account with.
-    * @returns none
-    **/
-    public SavingsAccount(double startInterestRate){
-        super();
-        setAnnualInterestRate(startInterestRate);
-    }
-
-
-    /**
-    * Constructor for bank account taking one argument. 
-    * @param startBalance is the balance to initialize the bank account with.
-    * @returns none
-    **/
-    public SavingsAccount(double startBalance, double startInterestRate){
-        super(startBalance);
-        setAnnualInterestRate(startInterestRate);
-    }
-
-
-    /**
-    * Constructor for bank account taking one argument. 
-    * @param startBalance is the balance to initialize the bank account with.
-    * @returns none
-    **/
-    public SavingsAccount(Customer aCustomer, double startBalance,
-        double startInterestRate){
-        super(aCustomer, startBalance);
-        setAnnualInterestRate(startInterestRate);
-    }
-
-
-    /**
-    * Bank account constructor taking two arguments. 
-    * @param <startBalance>: the initial balance. <accountNumber>: 4 digit string specifying the
-    * account number.
-    * @returns none
-    **/
-    public SavingsAccount(double startBalance, String accountNumber){
-        super(startBalance, accountNumber);    
-    }
-
-
-    /**
-    * Bank account constructor taking two arguments. 
-    * @param <accountHolder>: The customer for which to initialize the bank account for. Expects 
-    Type Customer to have been initialized and passed to the this constructor. Will use the current 
-    * specified account holder.  
-    * <startBalance>: Initial balance for the customer. 
-    * @see Customer class
-    * @returns none
-    **/
-    public SavingsAccount(Customer accountHolder, double startBalance){
-        super(accountHolder, startBalance);
-    }
-
-
-    public double getMonthlyFeesAndInterest(){
-        double currentBalance = getBalance();
-        double monthlyRate = annualInterestRate/12;
-        double interestIncrued = monthlyRate * currentBalance;
-        return interestIncrued;
-    }
-
-
-    public void withdraw(double withdrawAmount){
-        double newBalance = getBalance() - withdrawAmount;
-
-        if (newBalance >= minimumBalance){
-            super.withdraw(withdrawAmount);
-        }
-
-    }
-
-
-    public void setAnnualInterestRate(double newRate){
-    	if (newRate >= 0 && newRate <= 1){
-    	    annualInterestRate = newRate;
-        }
-    }
-
-
-    public double getAnnualInterestRate(){
-    	return annualInterestRate;
-    }
-
-
-    public void setMinimumBalance(double newMinimum){
-        minimumBalance = newMinimum;
-    }
-
-
-    public double getMinimumBalance(){
-    	return minimumBalance;
-    }
-
-
-// End of class.
+    public double getAnnualInterestRate() {
+		return annualInterestRate;
+	}
+	
+	public void setAnnualInterestRate(double newRate) {
+		if (newRate >= 0.0 && newRate <= 1.0) {
+			annualInterestRate = newRate;
+		}
+	}
+	
+	public double getMinimumBalance(){
+		return minimumBalance;
+	}
+	
+	public void setMinimumBalance(double minBalance) {
+		minimumBalance = minBalance;
+	}
+	
+	public void withdraw(double amount) {
+		if (getBalance() - amount >= minimumBalance) {
+			super.withdraw(amount);
+		}
+	}	
+//	
+//	public void depositMonthlyInterest() {
+//		deposit(getBalance() * (annualInterestRate / 12) );
+//	}
 }
